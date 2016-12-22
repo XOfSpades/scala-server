@@ -1,0 +1,58 @@
+version: '2'
+services:
+  postgres_scala_server_dev:
+    image: xofspades/postgres-scala-server-dev
+    container_name: postgres-scala-server-dev
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    env_file:
+      - ./db/env_dev.list
+    networks:
+      - "scala-server-n"
+    volumes:
+      - postgres-scala-server-data-dev-v:/var/lib/postgresql/data
+
+  postgres_scala_server_test:
+    image: xofspades/postgres-scala-server-test
+    container_name: postgres-scala-server-test
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    env_file:
+      - ./db/env_test.list
+    networks:
+      - "scala-server-n"
+    volumes:
+      - postgres-scala-server-data-test-v:/var/lib/postgresql/data
+
+  scala-server-dev:
+    image: xofspades/scala-server:0.0.1
+    container_name: scala-server-dev
+    depends_on:
+      - postgres_scala_server_dev
+    volumes:
+      - ./config:/config
+    networks:
+      - "scala-server-n"
+
+  scala-server-test:
+    image: xofspades/scala-server-test
+    build:
+      context: .
+      dockerfile: Dockerfile-test
+    container_name: scala-server-test
+    command: sbt test
+    depends_on:
+      - postgres_scala_server_test
+    volumes:
+      - ./config:/config
+    networks:
+      - "scala-server-n"
+
+volumes:
+  postgres-scala-server-data-dev-v :
+  postgres-scala-server-data-test-v :
+
+networks:
+  scala-server-n:

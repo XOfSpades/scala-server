@@ -1,0 +1,14 @@
+FROM hseeberger/scala-sbt
+
+MAINTAINER XOfSpades
+
+RUN mkdir /scala_server
+WORKDIR /scala_server
+
+RUN mkdir /scala_server/project
+COPY project/plugin.sbt /scala_server/project
+
+COPY build.sbt /scala_server
+RUN sbt compile
+
+COPY src /scala_server/src

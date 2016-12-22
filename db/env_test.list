@@ -1,0 +1,3 @@
+POSTGRES_USER=scala_server_user
+POSTGRES_PASSWORD=f0O84R
+POSTGRES_DB=scala_server_test
