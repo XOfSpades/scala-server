@@ -35,6 +35,8 @@ services:
       - ./config:/config
     networks:
       - "scala-server-n"
+    ports:
+      - "8080:8080"
 
   scala-server-test:
     image: xofspades/scala-server-test
